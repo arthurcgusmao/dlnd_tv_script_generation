@@ -13321,7 +13321,7 @@ Model Trained and Saved
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -13359,7 +13359,7 @@ Model Trained and Saved
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_tensors</span><span class="p">(</span><span class="n">loaded_graph</span><span class="p">):</span>
@@ -13416,7 +13416,7 @@ Model Trained and Saved
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pick_word</span><span class="p">(</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">int_to_vocab</span><span class="p">):</span>
@@ -13426,10 +13426,7 @@ Model Trained and Saved
 <span class="sd">    :param int_to_vocab: Dictionary of word ids as the keys and words as the values</span>
 <span class="sd">    :return: String of the predicted word</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">probabilities</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="c1"># how can I do this in just one line?</span>
-    <span class="n">int_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">probabilities</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">int_to_vocab</span><span class="p">[</span><span class="n">int_</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">int_to_vocab</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">probabilities</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -13472,7 +13469,7 @@ Model Trained and Saved
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gen_length</span> <span class="o">=</span> <span class="mi">200</span>
@@ -13506,7 +13503,8 @@ Model Trained and Saved
             <span class="p">[</span><span class="n">probs</span><span class="p">,</span> <span class="n">final_state</span><span class="p">],</span>
             <span class="p">{</span><span class="n">input_text</span><span class="p">:</span> <span class="n">dyn_input</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">:</span> <span class="n">prev_state</span><span class="p">})</span>
         
-        <span class="n">pred_word</span> <span class="o">=</span> <span class="n">pick_word</span><span class="p">(</span><span class="n">probabilities</span><span class="p">[</span><span class="n">dyn_seq_length</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">int_to_vocab</span><span class="p">)</span>
+<span class="c1">#         pred_word = pick_word(probabilities[dyn_seq_length-1], int_to_vocab)</span>
+        <span class="n">pred_word</span> <span class="o">=</span> <span class="n">pick_word</span><span class="p">(</span><span class="n">probabilities</span><span class="p">[:</span> <span class="p">,</span> <span class="n">dyn_seq_length</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">int_to_vocab</span><span class="p">)</span>
 
         <span class="n">gen_sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_word</span><span class="p">)</span>
     
@@ -13536,27 +13534,21 @@ Model Trained and Saved
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>INFO:tensorflow:Restoring parameters from ./save
+moe_szyslak: well, i&#39;m just, &#39;cause i get these people fast.
+homer_simpson: you can&#39;t win!
+homer_simpson: hey, those are my meals!
+moe_szyslak: and i thought that drinkin&#39;! why not quite put this...(then) moe, it can&#39;t-- i did.
+moe_szyslak: now wait a minute...
+waylon_smithers: oww.(reading label, contemptuous) chateau latour-- eighteen eighty-six...
+homer_simpson: i told you to keep a little about&#34; fireball and mudflap.&#34;
+kent_brockman: another duff?
+moe_szyslak:(dinner) what do you think.
+moe_szyslak: can we just win you up your family.
+homer_simpson:(still) so, it was &#39;cause i can loan find out who so the power plant to the wordloaf festival in vermont?
+lisa_simpson:(frustrated noise) it&#39;s old here at the color. uh, stick out your tongue to&#34; beers ordered. i did not that.
+marge_simpson: it was on men. you don&#39;t know they.
+carl_carlson: here&#39;s to bears...(
 </pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">IndexError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-50-1db8abe06e71&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     30</span>             {input_text: dyn_input, initial_state: prev_state})
-<span class="ansi-green-intense-fg ansi-bold">     31</span> 
-<span class="ansi-green-fg">---&gt; 32</span><span class="ansi-red-fg">         </span>pred_word <span class="ansi-blue-fg">=</span> pick_word<span class="ansi-blue-fg">(</span>probabilities<span class="ansi-blue-fg">[</span>dyn_seq_length<span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> int_to_vocab<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     33</span> 
-<span class="ansi-green-intense-fg ansi-bold">     34</span>         gen_sentences<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>pred_word<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">IndexError</span>: index 1 is out of bounds for axis 0 with size 1</pre>
 </div>
 </div>
 
